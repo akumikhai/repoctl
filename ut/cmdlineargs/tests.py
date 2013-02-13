@@ -3,7 +3,7 @@
 import unittest
 
 from repolib.cmdlineargs import (ArgParser,
-    Fix,Str,Opt,Seq,
+    Fix,Str,Opt,Seq,Alt,
     Val,VMSingle,VMList)
 
 
@@ -145,6 +145,33 @@ class TC_CmdLineArgs(unittest.TestCase):
         r = AP.parse_args(['test','abra','cadabra'])
         self.assertFalse(r)
 
+    def test_seq3(self):
+        AP = ArgParser(Seq(Str(),Str()))
+        
+        self.assertRaises(Exception,AP.parse_args,['cadabra','abra'])
+
+
+    def test_alt(self):
+        AP = ArgParser(Alt(Fix('abra'),Fix('cadabra')))
+        
+        r = AP.parse_args(['abra'])
+        self.assertTrue(r)
+
+        r = AP.parse_args(['cadabra'])
+        self.assertTrue(r)
+
+        r = AP.parse_args([])
+        self.assertFalse(r)
+
+        r = AP.parse_args(['test'])
+        self.assertFalse(r)
+
+        r = AP.parse_args(['abra','cadabra'])
+        self.assertFalse(r)
+
+        r = AP.parse_args(['abra','cadabra','test'])
+        self.assertFalse(r)
+
         
 
 def suite():
@@ -155,4 +182,6 @@ def suite():
         TC_CmdLineArgs('test_opt2'),
         TC_CmdLineArgs('test_seq1'),
         TC_CmdLineArgs('test_seq2'),
+        TC_CmdLineArgs('test_seq3'),
+        TC_CmdLineArgs('test_alt'),
         ])
