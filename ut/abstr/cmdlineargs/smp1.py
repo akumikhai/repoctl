@@ -14,8 +14,8 @@ class TC_Smp1(unittest.TestCase):
         'test_no',
         'test_fix',
         'test_str',
-        'test_Arg1',
-        'test_Arg2',
+        'test_arg1',
+        'test_arg2',
         'test_seq1',
         'test_seq2',
         'test_seq3',
@@ -66,7 +66,7 @@ class TC_Smp1(unittest.TestCase):
         r = AP.parse_args(['abra','cadabra'])
         self.assertFalse(r)
 
-    def test_Arg1(self):
+    def test_arg1(self):
         AP = ArgParser(Arg('test','t'))
 
         r = AP.parse_args(['-t'])
@@ -91,7 +91,7 @@ class TC_Smp1(unittest.TestCase):
         self.assertFalse(r)
         
 
-    def test_Arg2(self):
+    def test_arg2(self):
         AP = ArgParser(Arg('test','t',Str()))
 
         r = AP.parse_args(['-t','abra'])
