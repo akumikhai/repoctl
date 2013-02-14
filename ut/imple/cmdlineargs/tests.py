@@ -3,7 +3,7 @@
 import unittest
 
 from repolib.cmdlineargs import (ArgParser,
-    No,Fix,Str,Opt,Seq,Alt,
+    No,Fix,Str,Arg,Seq,Alt,
     Val,VMSingle,VMList,VMDict)
 
 
@@ -11,8 +11,8 @@ class TC_CmdLineArgs(unittest.TestCase):
 
     def runTest(self):
         AP = ArgParser(Val(VMDict(),Alt(
-            Opt('version','V'),
-            Opt('help','h'),
+            Arg('version','V'),
+            Arg('help','h'),
             No(),
         )))
         

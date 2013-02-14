@@ -140,7 +140,7 @@ class Str:
             return None
         
 
-class Opt:
+class Arg:
     
     def __init__(self,name,short,after=None):
         self.name = name
@@ -234,5 +234,5 @@ class Plus:
         return curlen
         
         
-            
 
+    
