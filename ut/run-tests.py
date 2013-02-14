@@ -13,19 +13,6 @@ Usage:
     ./run-tests.py all|<test>
 """
 
-
-def run_tests_all():
-    
-    import abstr.cmdlineargs.tests
-    import imple.cmdlineargs.tests
-
-    suite = unittest.TestSuite([
-        abstr.cmdlineargs.tests.suite(),
-        imple.cmdlineargs.tests.suite(),
-        ])
-
-    unittest.TextTestRunner(verbosity=3).run(suite)
-
 TEST_ROOTS = [
     'abstr.cmdlineargs.tests',
     'imple.cmdlineargs.tests',
