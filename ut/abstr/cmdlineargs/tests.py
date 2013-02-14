@@ -3,8 +3,12 @@
 import unittest
 
 import smp1
+import namedval
 
 def suite():
-    return unittest.TestSuite([smp1.suite()])
+    return unittest.TestSuite([
+        smp1.suite(),
+        namedval.suite(),
+        ])
 
 

@@ -9,6 +9,8 @@ class ArgParser:
         self.pattern = pattern
         self.valuemode = VMSingle()
         self.valuemode_stack = []
+        self.name = None
+        self.name_stack = []
   
         self.result = None
     
@@ -25,8 +27,15 @@ class ArgParser:
         self.valuemode,self.value = self.valuemode_stack.pop()
         self.set_value(value)
     
+    def push_name(self,name):
+        self.name_stack.append(self.name)
+        self.name = name
+    
+    def pop_name(self):
+        self.name = self.name_stack.pop()
+    
     def set_value(self,value):
-        self.valuemode.set_value(self,value)
+        self.valuemode.set_value(self,value,self.name)
     
     def parse_args(self,seq):
         self.reset()
@@ -49,7 +58,7 @@ class VMSingle:
     def result(self,parser):
         return parser.value[1]
     
-    def set_value(self,parser,value):
+    def set_value(self,parser,value,name):
         if not parser.value[0]:
             parser.value = [True,value]
         else:
@@ -63,7 +72,7 @@ class VMList:
     def result(self,parser):
         return parser.value
     
-    def set_value(self,parser,value):
+    def set_value(self,parser,value,name):
         parser.value.append(value)
     
 
@@ -76,8 +85,8 @@ class VMDict:
     def result(self,parser):
         return parser.value
     
-    def set_value(self,parser,value,name=None):
-        parser.value[Name] = value
+    def set_value(self,parser,value,name):
+        parser.value[name] = value
     
 
 
@@ -104,7 +113,9 @@ class Name:
         self.pattern = pattern
     
     def chk_parse(self,parser,seq,pos):
+        parser.push_name(self.name)
         r = self.pattern.chk_parse(parser,seq,pos)
+        parser.pop_name()
         return r
 
 
@@ -153,7 +164,9 @@ class Arg:
                 if self.after is None:
                     return 1
                 
+                parser.push_name(self.name)
                 l = self.after.chk_parse(parser,seq,pos+1)
+                parser.pop_name()
                 if l is None:
                     return None
                 else:
