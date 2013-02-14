@@ -1,13 +1,35 @@
 # -*- coding: utf-8 -*-
 
 import unittest
+from repolib import ut
 
 from repolib.cmdlineargs import (ArgParser,
-    Fix,Str,Opt,Seq,Alt,
+    No,Fix,Str,Opt,Seq,Alt,
     Val,VMSingle,VMList)
 
 
-class TC_CmdLineArgs(unittest.TestCase):
+class TC_Smp1(unittest.TestCase):
+
+    __TESTS__ = [
+        'test_no',
+        'test_fix',
+        'test_str',
+        'test_opt1',
+        'test_opt2',
+        'test_seq1',
+        'test_seq2',
+        'test_seq3',
+        'test_alt',
+        ]
+
+
+    def test_no(self):
+        AP = ArgParser(No())
+        r = AP.parse_args([])
+        self.assertTrue(r)
+
+        r = AP.parse_args(['abra'])
+        self.assertFalse(r)
 
     def test_fix(self):
         AP = ArgParser(Fix('test'))
@@ -150,7 +172,6 @@ class TC_CmdLineArgs(unittest.TestCase):
         
         self.assertRaises(Exception,AP.parse_args,['cadabra','abra'])
 
-
     def test_alt(self):
         AP = ArgParser(Alt(Fix('abra'),Fix('cadabra')))
         
@@ -172,16 +193,8 @@ class TC_CmdLineArgs(unittest.TestCase):
         r = AP.parse_args(['abra','cadabra','test'])
         self.assertFalse(r)
 
-        
 
 def suite():
-    return unittest.TestSuite([
-        TC_CmdLineArgs('test_fix'),
-        TC_CmdLineArgs('test_str'),
-        TC_CmdLineArgs('test_opt1'),
-        TC_CmdLineArgs('test_opt2'),
-        TC_CmdLineArgs('test_seq1'),
-        TC_CmdLineArgs('test_seq2'),
-        TC_CmdLineArgs('test_seq3'),
-        TC_CmdLineArgs('test_alt'),
-        ])
+    return ut.tcc_tests(TC_Smp1)
+        
+

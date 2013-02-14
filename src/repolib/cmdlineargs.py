@@ -1,6 +1,7 @@
 #-*- coding: utf-8 -*-
 
 import sys
+from repolib.common import Default
 
 class ArgParser:
 
@@ -68,7 +69,16 @@ class VMList:
 
 
 class VMDict:
-    pass
+
+    def initial(self):
+        return {}
+
+    def result(self,parser):
+        return parser.value
+    
+    def set_value(self,parser,value,name=None):
+        parser.value[Name] = value
+    
 
 
 class Val:
@@ -87,13 +97,34 @@ class Val:
         return r
 
 
+class Name:
+    
+    def __init__(self,name,pattern):
+        self.name = name
+        self.pattern = pattern
+    
+    def chk_parse(self,parser,seq,pos):
+        r = self.pattern.chk_parse(parser,seq,pos)
+        return r
+
+
+class No:
+
+    def chk_parse(self,parser,seq,pos):
+        return 0
+
+
 class Fix:
 
-    def __init__(self,word):
+    def __init__(self,word,value=Default):
         self.word = word
+        self.value = value
 
     def chk_parse(self,parser,seq,pos):
         if pos<len(seq) and seq[pos]==self.word:
+            if self.value is not Default:
+                parser.set_value(seq[pos])
+                
             return 1
         else:
             return None
@@ -164,14 +195,13 @@ class Alt:
         self.patterns = patterns
         
     def chk_parse(self,parser,seq,pos):
-        if pos<len(seq):
-            for p in self.patterns:
-                l = p.chk_parse(parser,seq,pos)
-                if l is None:
-                    continue
-                else:
-                    return l
-        else:
-            return None
-
         
+        for p in self.patterns:
+            l = p.chk_parse(parser,seq,pos)
+            if l is None:
+                continue
+            else:
+                return l
+        
+        return None
+
