@@ -170,19 +170,18 @@ class Seq:
     def chk_parse(self,parser,seq,pos):
         curpos = pos
         curlen = 0
+        processed = False
         
         for p in self.patterns:
-            if curpos<len(seq):
-                l = p.chk_parse(parser,seq,curpos)
-                if l is None:
-                    return None
-                else:
-                    curpos += l
-                    curlen += l
-            else:
+            l = p.chk_parse(parser,seq,curpos)
+            if l is None:
                 return None
+            else:
+                curpos += l
+                curlen += l
+                processed = True
         
-        if curlen==0:
+        if not processed:
             return None
             
         return curlen
@@ -206,6 +205,19 @@ class Alt:
         return None
 
 
+class Opt:
+
+    def __init__(self,pattern):
+        self.pattern = pattern
+    
+    def chk_parse(self,parser,seq,pos):
+        l = self.pattern.chk_parse(parser,seq,pos)
+        if l is None:
+            return 0
+        else:
+            return l
+    
+    
 class Plus:
 
     def __init__(self,pattern,min=1,max=None):
@@ -233,6 +245,3 @@ class Plus:
         
         return curlen
         
-        
-
-    
