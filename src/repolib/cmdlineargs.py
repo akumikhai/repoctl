@@ -36,22 +36,31 @@ class ArgParser:
         elif len(seq)!=L:
             return False
         else:
-            self.result = self.value
+            self.result = self.valuemode.result(self)
             return True
 
 
 class VMSingle:
 
     def initial(self):
-        return None
+        return [False,None]
+    
+    def result(self,parser):
+        return parser.value[1]
     
     def set_value(self,parser,value):
-        parser.value = value
+        if not parser.value[0]:
+            parser.value = [True,value]
+        else:
+            raise Exception('Value is already set')
     
 class VMList:
 
     def initial(self):
         return []
+
+    def result(self,parser):
+        return parser.value
     
     def set_value(self,parser,value):
         parser.value.append(value)
@@ -153,5 +162,16 @@ class Alt:
     
     def __init__(self,*patterns):
         self.patterns = patterns
-        self.pre_valuemode()
+        
+    def chk_parse(self,parser,seq,pos):
+        if pos<len(seq):
+            for p in self.patterns:
+                l = p.chk_parse(parser,seq,pos)
+                if l is None:
+                    continue
+                else:
+                    return l
+        else:
+            return None
+
         
