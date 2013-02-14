@@ -205,3 +205,34 @@ class Alt:
         
         return None
 
+
+class Plus:
+
+    def __init__(self,pattern,min=1,max=None):
+        self.pattern = pattern
+        self.min = min
+        self.max = max
+    
+    def chk_parse(self,parser,seq,pos):
+        curpos = pos
+        curlen = 0
+        count = 0
+        while True:
+            l = self.pattern.chk_parse(parser,seq,curpos)
+            if l is None:
+                if count<self.min:
+                    return None
+                else:
+                    break
+            else:
+                curpos += l
+                curlen += l
+                count += 1
+                if self.max is not None and count>self.max:
+                    break
+        
+        return curlen
+        
+        
+            
+

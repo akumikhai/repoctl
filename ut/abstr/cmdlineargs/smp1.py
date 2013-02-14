@@ -4,7 +4,7 @@ import unittest
 from repolib import ut
 
 from repolib.cmdlineargs import (ArgParser,
-    No,Fix,Str,Opt,Seq,Alt,
+    No,Fix,Str,Opt,Seq,Alt,Plus,
     Val,VMSingle,VMList)
 
 
@@ -20,6 +20,7 @@ class TC_Smp1(unittest.TestCase):
         'test_seq2',
         'test_seq3',
         'test_alt',
+        'test_plus',
         ]
 
 
@@ -193,6 +194,26 @@ class TC_Smp1(unittest.TestCase):
         r = AP.parse_args(['abra','cadabra','test'])
         self.assertFalse(r)
 
+
+    def test_plus(self):
+        AP = ArgParser(Val(VMList(),Plus(Str())))
+
+        r = AP.parse_args(['abra'])
+        self.assertTrue(r)
+        self.assertEquals(AP.result,['abra'])
+
+        r = AP.parse_args(['abra','cadabra'])
+        self.assertTrue(r)
+        self.assertEquals(AP.result,['abra','cadabra'])
+        
+        r = AP.parse_args(['abra','shvabra','cadabra'])
+        self.assertTrue(r)
+        self.assertEquals(AP.result,['abra','shvabra','cadabra'])
+        
+        r = AP.parse_args([])
+        self.assertFalse(r)
+        
+        
 
 def suite():
     return ut.tcc_tests(TC_Smp1)
