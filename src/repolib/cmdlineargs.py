@@ -23,7 +23,7 @@ class ArgParser:
         self.value = valuemode.initial()
         
     def pop_valuemode(self):
-        value = self.value
+        value = self.valuemode.get_result(self)
         self.valuemode,self.value = self.valuemode_stack.pop()
         self.set_value(value)
     
@@ -46,7 +46,7 @@ class ArgParser:
         elif len(seq)!=L:
             return False
         else:
-            self.result = self.valuemode.result(self)
+            self.result = self.valuemode.get_result(self)
             return True
 
 
@@ -55,7 +55,8 @@ class VMSingle:
     def initial(self):
         return [False,None]
     
-    def result(self,parser):
+    def get_result(self,parser):
+        #print "VMSingle get_result:/%s/"%str(parser.value)
         return parser.value[1]
     
     def set_value(self,parser,value,name):
@@ -64,12 +65,14 @@ class VMSingle:
         else:
             raise Exception('Value is already set')
     
+    
+    
 class VMList:
 
     def initial(self):
         return []
 
-    def result(self,parser):
+    def get_result(self,parser):
         return parser.value
     
     def set_value(self,parser,value,name):
@@ -82,7 +85,7 @@ class VMDict:
     def initial(self):
         return {}
 
-    def result(self,parser):
+    def get_result(self,parser):
         return parser.value
     
     def set_value(self,parser,value,name):
@@ -108,13 +111,16 @@ class Val:
 
 class Name:
     
-    def __init__(self,name,pattern):
+    def __init__(self,name,pattern,value=Default):
         self.name = name
         self.pattern = pattern
+        self.value = Default
     
     def chk_parse(self,parser,seq,pos):
         parser.push_name(self.name)
         r = self.pattern.chk_parse(parser,seq,pos)
+        if self.value is not Default:
+            parser.set_value(self.value)
         parser.pop_name()
         return r
 
@@ -153,15 +159,28 @@ class Str:
 
 class Arg:
     
-    def __init__(self,name,short,after=None):
+    def __init__(self,name,short,after=Default,value=Default,valname=False):
+        if value is not Default and after is not Default:
+            raise Exception('Forbid to use after and value together')
+        
         self.name = name
         self.short = short
         self.after = after
+        self.value = value
+        self.valname = valname
         
     def chk_parse(self,parser,seq,pos):
         if pos<len(seq):
             if seq[pos]=='--%s'%self.name or seq[pos]=='-%s'%self.short:
-                if self.after is None:
+                if self.after is Default:
+                    if self.value is not Default:
+                        parser.push_name(self.name)
+                        parser.set_value(self.value)
+                        parser.pop_name()
+                    else:
+                        if self.valname:
+                            parser.set_value(self.name)
+
                     return 1
                 
                 parser.push_name(self.name)

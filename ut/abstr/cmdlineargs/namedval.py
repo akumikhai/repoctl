@@ -14,6 +14,7 @@ class TC_NamedVal(unittest.TestCase):
     __TESTS__ = [
         'test_strs',
         'test_arg',
+        'test_name',
         ]
 
 
@@ -37,6 +38,16 @@ class TC_NamedVal(unittest.TestCase):
         r = AP.parse_args(['--abra','x','--cadabra','y'])
         self.assertTrue(r)
         self.assertEquals(AP.result,{'abra':'x','cadabra':'y'})
+
+    def test_name(self):
+        AP = ArgParser(Val(VMDict(),
+            Name('command',Val(VMSingle(),
+                Arg('abra','a',valname=True),
+            ))))
+
+        r = AP.parse_args(['--abra'])
+        self.assertTrue(r)
+        self.assertEquals(AP.result,{'command':'abra'})
 
 def suite():
     return ut.tcc_tests(TC_NamedVal)

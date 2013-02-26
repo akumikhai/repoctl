@@ -1,38 +1,13 @@
 #!/usr/bin/env python2
 #-*- coding: utf-8 -*-
 
-from repolib.cmdlineargs import parse_args,Fix #Alt,Req,Fix,Value
+from repolib.cmdlineargs import (ArgParser,
+    No,Fix,Str,Arg,Seq,Alt,Opt,Plus,
+    Val,VMSingle,VMList)
 
-def usage_msg():
-    print """\
-Usage:
-"""
 
-def version():
-    print """\
-Help:
-"""
+AP = ArgParser(Val(VMList(),Seq(Str(),Str())))
 
-def help():
-    print """\
-Help:
-"""
-
-def cmd1():
-    pass
-    
-def cmd2():
-    pass
-    
-#AP = ArgParser()
-#Alt(
-#    Value('version',Req(Alt(Fix('-v'),Fix('--version')))),
-#    Value('help',Req(Alt(Fix('-h'),Fix('--help')))),
-#    Value
-#)
-
-P1 = Fix('test')
-
-t1 = parse_args(P1,['test'])
-print t1
-
+r = AP.parse_args(['test','abra'])
+assert r is True
+assert AP.result==['test','abra']
