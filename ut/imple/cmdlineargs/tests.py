@@ -3,11 +3,7 @@
 import unittest
 from repolib import ut
 
-from repolib.cmdlineargs import (ArgParser,
-    No,Fix,Str,Arg,Seq,Alt,
-    Name,Val,
-    VMSingle,VMList,VMDict)
-
+import cmdlineargs_cfg
 
 class TC_CmdLineArgs(unittest.TestCase):
 
@@ -20,19 +16,7 @@ class TC_CmdLineArgs(unittest.TestCase):
         ]
 
     def setUp(self):
-        self.ap = ArgParser(Val(VMDict(),Alt(
-            Name('command',Alt(
-                Fix('version',value=True),
-                Arg('version','V',valname=True),
-                )),
-            Name('command',Alt(
-                Fix('help',value=True),
-                Arg('help','h',valname=True),
-                )),
-            Name('command',Fix('pullall',value=True)),
-            Name('command',Fix('pushall',value=True)),
-            No(),
-        )))
+        self.ap = cmdlineargs_cfg.mk_argparser()
 
     def test_no(self):
 
