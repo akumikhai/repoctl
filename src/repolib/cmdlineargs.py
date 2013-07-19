@@ -9,7 +9,7 @@ class ArgParser:
         self.pattern = pattern
         self.valuemode = VMSingle()
         self.valuemode_stack = []
-        self.name = None
+        self.name = Default
         self.name_stack = []
   
         self.result = None
@@ -89,7 +89,8 @@ class VMDict:
         return parser.value
     
     def set_value(self,parser,value,name):
-        parser.value[name] = value
+        if name is not Default:
+            parser.value[name] = value
     
 
 
@@ -140,7 +141,7 @@ class Fix:
     def chk_parse(self,parser,seq,pos):
         if pos<len(seq) and seq[pos]==self.word:
             if self.value is not Default:
-                parser.set_value(seq[pos])
+                parser.set_value(self.value)
                 
             return 1
         else:

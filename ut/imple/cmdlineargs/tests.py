@@ -54,13 +54,17 @@ class TC_CmdLineArgs(unittest.TestCase):
 
     def test_main(self):
         
-        r = self.ap.parse_args(['pullall'])
+        r = self.ap.parse_args(['status'])
         self.assertTrue(r)
-        self.assertEquals(self.ap.result,{'command':'pullall'})
+        self.assertEquals(self.ap.result,{'command':'status', 'repos':[]})
 
-        r = self.ap.parse_args(['pushall'])
+        r = self.ap.parse_args(['pull'])
         self.assertTrue(r)
-        self.assertEquals(self.ap.result,{'command':'pushall'})
+        self.assertEquals(self.ap.result,{'command':'pull', 'repos':[]})
+
+        r = self.ap.parse_args(['push'])
+        self.assertTrue(r)
+        self.assertEquals(self.ap.result,{'command':'push', 'repos':[]})
 
     
     def test_fails(self):

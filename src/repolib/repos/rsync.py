@@ -4,15 +4,19 @@ class RepoRSync:
     
     repo_type = 'rsync'
 
-    def reinit(self):
-        pass
+    def __init__(self,name,path):
+        self.name = name
+        self.path = path
+
+    def init(self):
+        print "[%s] rsync init"%self.name
         
     def status(self):
-        pass
+        print "[%s] rsync status"%self.name
         
     def pull(self,remote):
-        pass
+        print "[%s] rsync pull"%self.name
         
     def push(self,remote):
-        pass
+        print "[%s] rsync push"%self.name
 
