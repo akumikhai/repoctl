@@ -13,3 +13,11 @@ class DefaultType:
         return 'Default'
     
 Default = DefaultType()
+
+
+class Result:
+
+    def __init__(self,success,data):
+        self.success = success
+        self.data = data
+

@@ -12,7 +12,8 @@ class RepoGit:
         print "[%s] git init"%self.name
         
     def status(self):
-        print "[%s] git status"%self.name
+        #print "[%s] git status"%self.name
+        return 0
         
     def pull(self,remote):
         print "[%s] git pull"%self.name

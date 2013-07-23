@@ -35,10 +35,11 @@ def get_config_paths():
     return R
 
 def used_config(ctl):
-    if ctl.config_path is None:
-        print "default config used"
-    else:
-        print "config from [%s] used"%(ctl.config_path)
+    #if ctl.config_path is None:
+    #    print "default config used"
+    #else:
+    #    print "config from [%s] used"%(ctl.config_path)
+    pass
 
 def mk_controller(verbose=True):
     ctl = Controller()
