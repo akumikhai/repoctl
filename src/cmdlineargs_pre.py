@@ -5,17 +5,29 @@ import controller_cfg
 def usage_message():
     print """\
 Usage:
-    repoctl <repo-command>
+    repoctl <command>
 
-<repo-command>
+<command>
 
     version
     help
-    add <name> <type> <path>
-    remove <name>
+    repo <repo-sub-command>
+    
     status <repo>*
     pull <repo>*
     push <repo>*
+
+<repo-sub-command>
+    list
+    add <name> <type> <path>
+    remove <name>
+    init <name>
+    drop <name>
+
+<remote-sub-command>
+    list
+    add <name> <path>
+    remove <name>
 
 """
 
@@ -49,6 +61,16 @@ def cmd_repo_move_after(argd):
     ctl = controller_cfg.mk_controller()
     ctl.do_repo_move_after(argd['name'],argd.get('name2'))
     
+def cmd_repo_init(argd):
+    ctl = controller_cfg.mk_controller()
+    r = ctl.do_repo_init(argd['name'])
+    print "Local repository [%s] at [%s] initialized"%(r['name'],r['path'])
+    
+def cmd_repo_drop(argd):
+    ctl = controller_cfg.mk_controller()
+    r = ctl.do_repo_drop(argd['name'])
+    print "Local repository [%s] at [%s] dropped"%(r['name'],r['path'])
+    
 
 def cmd_remote_list(argd):
     ctl = controller_cfg.mk_controller()
@@ -56,7 +78,7 @@ def cmd_remote_list(argd):
     
 def cmd_remote_add(argd):
     ctl = controller_cfg.mk_controller()
-    ctl.do_remote_add(argd['name'],argd['type'],argd['path'])
+    ctl.do_remote_add(argd['name'],argd['path'])
     
 def cmd_remote_remove(argd):
     ctl = controller_cfg.mk_controller()
@@ -65,6 +87,14 @@ def cmd_remote_remove(argd):
 def cmd_remote_default(argd):
     ctl = controller_cfg.mk_controller()
     ctl.do_remote_default(argd['name'])
+    
+def cmd_remote_move_before(argd):
+    ctl = controller_cfg.mk_controller()
+    ctl.do_remote_move_before(argd['name'],argd.get('name2'))
+    
+def cmd_remote_move_after(argd):
+    ctl = controller_cfg.mk_controller()
+    ctl.do_remote_move_after(argd['name'],argd.get('name2'))
     
     
 def cmd_status(argd):
@@ -93,6 +123,8 @@ Dcmd = {
     'repo_remove': cmd_repo_remove,
     'repo_move_before': cmd_repo_move_before,
     'repo_move_after': cmd_repo_move_after,
+    'repo_init': cmd_repo_init,
+    'repo_drop': cmd_repo_drop,
     
     'remote_list': cmd_remote_list,
     'remote_add': cmd_remote_add,

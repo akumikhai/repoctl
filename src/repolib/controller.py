@@ -17,6 +17,7 @@ class Controller:
         self.repositories_order = []
         self.remotes = {}
         self.remotes_order = []
+        self.remote_default = None
         
         self.search_config_paths = []
 
@@ -75,6 +76,12 @@ class Controller:
             self.repositories[reponame] = repocls(reponame,repopath)
             self.repositories_order.append(reponame)
          
+        for remoteconf in self.config['remotes']:
+            remotename = remoteconf['name']
+            remotepath = remoteconf['path']
+            self.remotes[remotename] = Remote(remotename,remotepath)
+            self.remotes_order.append(remotename)
+
      
     def refresh_config(self):
         
@@ -112,10 +119,6 @@ class Controller:
         f.close()
        
     
-    #def add_repo(self,name,repoconf):
-    #    repocls = RepoD[repoconf['type']]
-    #    self.repositories[name] = repocls(repoconf)
-     
     def do_repo_list(self):
         for rn in self.repositories_order:
             print rn
@@ -124,6 +127,8 @@ class Controller:
     def do_repo_add(self,name,repotype,path):
         if name in self.repositories:
             raise Exception("Repository [%s] already exists"%name)
+
+        path = os.path.abspath(path)
 
         repocls = RepoD[repotype]
         self.repositories[name] = repocls(name,path)
@@ -181,33 +186,60 @@ class Controller:
         self.refresh_config()
         self.save_config()
 
+    def do_repo_init(self,name):
+
+        if name not in self.repositories:
+            raise Exception("Repository [%s] not found"%name)
+
+        repo = self.repositories[name]
+        rc = repo.init()
+        r = {'name':name,'path':repo.path}
+        return r
+        
+    def do_repo_drop(self,name):
+
+        if name not in self.repositories:
+            raise Exception("Repository [%s] not found"%name)
+
+        repo = self.repositories[name]
+        rc = repo.drop()
+        r = {'name':name,'path':repo.path}
+        return r
+
 
     def do_remote_list(self):
         for rn in self.remotes_order:
             print rn
         
         
-    def do_remote_add(self,name,repotype,path):
+    def do_remote_add(self,name,path):
         if name in self.remotes:
             raise Exception("Remote [%s] already exists"%name)
 
-        #repocls = RepoD[repotype]
-        #self.repositories[name] = repocls(name,path)
-        #self.repository_order.append(name)
-        #
-        #self.refresh_config()
-        #self.save_config()
+        self.remotes[name] = Remote(name,path)
+        self.remotes_order.append(name)
+        
+        self.refresh_config()
+        self.save_config()
         
     def do_remote_remove(self,name):
         if name not in self.remotes:
             raise Exception("Remote [%s] not found"%name)
         
-        #del(self.repositories[name])
-        #self.repository_order.remove(name)
-        #
-        #self.refresh_config()
-        #self.save_config()
+        del(self.remotes[name])
+        self.remotes_order.remove(name)
         
+        self.refresh_config()
+        self.save_config()
+        
+    def do_remote_default(self,name):
+        self.remote_default = name
+
+    def do_remote_move_before(self,name,namex):
+        print "do_remote_move_before",name,namex
+
+    def do_remote_move_after(self,name,namex):
+        print "do_remote_move_after",name,namex
 
     def do_status(self,repos=None):
         if repos is None:
@@ -224,3 +256,11 @@ class Controller:
     def do_pull(self,repos=None):
         print "do_pull",repos
         
+
+class Remote:
+    
+    def __init__(self,name,path):
+        self.name = name
+        self.path = path
+
+        self.repositories = {}

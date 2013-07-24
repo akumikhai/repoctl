@@ -44,6 +44,14 @@ def mk_argparser():
                     Name('name', Str()),
                     Opt(Name('name2', Str())),
                     ),
+                Seq(
+                    Name('command', Fix('init', value='repo_init')),
+                    Name('name', Str()),
+                    ),
+                Seq(
+                    Name('command', Fix('drop', value='repo_drop')),
+                    Name('name', Str()),
+                    ),
                 ),
             ),
 
@@ -63,6 +71,16 @@ def mk_argparser():
 
                 Seq(
                     Name('command', Fix('list', value='remote_list')),
+                    ),
+                Seq(
+                    Name('command', Fix('move-before', value='remote_move_before')),
+                    Name('name', Str()),
+                    Opt(Name('name2', Str())),
+                    ),
+                Seq(
+                    Name('command', Fix('move-after', value='remote_move_after')),
+                    Name('name', Str()),
+                    Opt(Name('name2', Str())),
                     ),
                 ),
             ),
