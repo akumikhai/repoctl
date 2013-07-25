@@ -33,7 +33,7 @@ class ArgParser:
     
     def pop_name(self):
         self.name = self.name_stack.pop()
-    
+
     def set_value(self,value):
         self.valuemode.set_value(self,value,self.name)
     

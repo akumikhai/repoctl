@@ -32,7 +32,10 @@ def mk_argparser():
                     Name('name', Str()),
                     ),
 
-                Name('command', Fix('list', value='repo_list')),
+                Seq(
+                    Name('command', Fix('list', value='repo_list')),
+                    Opt(Arg('verbose', 'v', value=True)),
+                    ),
 
                 Seq(
                     Name('command', Fix('move-before', value='repo_move_before')),
@@ -63,12 +66,10 @@ def mk_argparser():
                     Name('name', Str()),
                     Name('path', Str()),
                     ),
-
                 Seq(
                     Name('command', Fix('remove', value='remote_remove')),
                     Name('name', Str()),
                     ),
-
                 Seq(
                     Name('command', Fix('list', value='remote_list')),
                     ),

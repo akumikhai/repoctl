@@ -99,7 +99,8 @@ class Controller:
         for name in self.remotes_order:
             remote = self.remotes[name]
             remotes.append({
-                'name':name
+                'name':name,
+                'path':remote.path
                 })
         
         config = {
@@ -119,9 +120,15 @@ class Controller:
         f.close()
        
     
-    def do_repo_list(self):
-        for rn in self.repositories_order:
-            print rn
+    def do_repo_list(self,verbose=False):
+        if not verbose:
+            for rn in self.repositories_order:
+                print rn
+        else:
+            for rn in self.repositories_order:
+                repo = self.repositories[rn]
+                print "%-16s %-16s %s"%(repo.name, repo.repo_type, repo.path)
+            
         
         
     def do_repo_add(self,name,repotype,path):

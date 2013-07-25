@@ -42,8 +42,9 @@ def cmd_help(argd):
 
 
 def cmd_repo_list(argd):
+    print "cmd_repo_list",argd
     ctl = controller_cfg.mk_controller()
-    ctl.do_repo_list()
+    ctl.do_repo_list(argd.get('verbose',False))
     
 def cmd_repo_add(argd):
     ctl = controller_cfg.mk_controller()
