@@ -1,6 +1,12 @@
 #-*- coding: utf-8 -*-
 
-import controller_cfg
+#import controller_cfg as ctlcfg
+
+_ctlcfg = None
+
+def initialize_ctlcfg(ctlcfg):
+    global _ctlcfg
+    _ctlcfg = ctlcfg
 
 def usage_message():
     print """\
@@ -43,74 +49,74 @@ def cmd_help(argd):
 
 def cmd_repo_list(argd):
     print "cmd_repo_list",argd
-    ctl = controller_cfg.mk_controller()
+    ctl = _ctlcfg.mk_controller()
     ctl.do_repo_list(argd.get('verbose',False))
     
 def cmd_repo_add(argd):
-    ctl = controller_cfg.mk_controller()
+    ctl = _ctlcfg.mk_controller()
     ctl.do_repo_add(argd['name'],argd['type'],argd['path'])
     
 def cmd_repo_remove(argd):
-    ctl = controller_cfg.mk_controller()
+    ctl = _ctlcfg.mk_controller()
     ctl.do_repo_remove(argd['name'])
     
 def cmd_repo_move_before(argd):
-    ctl = controller_cfg.mk_controller()
+    ctl = _ctlcfg.mk_controller()
     ctl.do_repo_move_before(argd['name'],argd.get('name2'))
     
 def cmd_repo_move_after(argd):
-    ctl = controller_cfg.mk_controller()
+    ctl = _ctlcfg.mk_controller()
     ctl.do_repo_move_after(argd['name'],argd.get('name2'))
     
 def cmd_repo_init(argd):
-    ctl = controller_cfg.mk_controller()
+    ctl = _ctlcfg.mk_controller()
     r = ctl.do_repo_init(argd['name'])
     print "Local repository [%s] at [%s] initialized"%(r['name'],r['path'])
     
 def cmd_repo_drop(argd):
-    ctl = controller_cfg.mk_controller()
+    ctl = _ctlcfg.mk_controller()
     r = ctl.do_repo_drop(argd['name'])
     print "Local repository [%s] at [%s] dropped"%(r['name'],r['path'])
     
 
 def cmd_remote_list(argd):
-    ctl = controller_cfg.mk_controller()
+    ctl = _ctlcfg.mk_controller()
     ctl.do_remote_list()
     
 def cmd_remote_add(argd):
-    ctl = controller_cfg.mk_controller()
+    ctl = _ctlcfg.mk_controller()
     ctl.do_remote_add(argd['name'],argd['path'])
     
 def cmd_remote_remove(argd):
-    ctl = controller_cfg.mk_controller()
+    ctl = _ctlcfg.mk_controller()
     ctl.do_remote_remove(argd['name'])
     
 def cmd_remote_default(argd):
-    ctl = controller_cfg.mk_controller()
+    ctl = _ctlcfg.mk_controller()
     ctl.do_remote_default(argd['name'])
     
 def cmd_remote_move_before(argd):
-    ctl = controller_cfg.mk_controller()
+    ctl = _ctlcfg.mk_controller()
     ctl.do_remote_move_before(argd['name'],argd.get('name2'))
     
 def cmd_remote_move_after(argd):
-    ctl = controller_cfg.mk_controller()
+    ctl = _ctlcfg.mk_controller()
     ctl.do_remote_move_after(argd['name'],argd.get('name2'))
     
     
 def cmd_status(argd):
-    ctl = controller_cfg.mk_controller()
+    ctl = _ctlcfg.mk_controller()
     repolist = argd['repos']
     if len(repolist)==0 or (repolist==['all']):
         repolist = None
     ctl.do_status(repolist)
 
 def cmd_pull(argd):
-    ctl = controller_cfg.mk_controller()
+    ctl = _ctlcfg.mk_controller()
     ctl.do_pull(argd['repos'])
 
 def cmd_push(argd):
-    ctl = controller_cfg.mk_controller()
+    ctl = _ctlcfg.mk_controller()
     ctl.do_push(argd['repos'])
     
 

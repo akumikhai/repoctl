@@ -2,8 +2,9 @@
 #-*- coding: utf-8 -*-
 
 from repolib.cmdlineargs import ArgParser
-import cmdlineargs_cfg
-from cmdlineargs_pre import Dcmd, cmd_usage, usage_message
+from impl import cmdlineargs_cfg
+from impl.controller_cfg import CtlCfg
+from impl.cmdlineargs_pre import initialize_ctlcfg, Dcmd, cmd_usage, usage_message
 
 import sys
 
@@ -12,6 +13,9 @@ import sys
 ap = cmdlineargs_cfg.mk_argparser()
 
 if ap.parse_args(sys.argv[1:]):
+    
+    initialize_ctlcfg(CtlCfg())
+    
     cmd = ap.result.get('command','usage')
     fcmd = Dcmd.get(cmd,cmd_usage)
     r = fcmd(ap.result)

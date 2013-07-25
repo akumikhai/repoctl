@@ -16,6 +16,7 @@ Usage:
 TEST_ROOTS = [
     'abstr.cmdlineargs.tests',
     'imple.cmdlineargs.tests',
+    'imple.realwork.tests',
 ]
 
 def run_tests_all():
