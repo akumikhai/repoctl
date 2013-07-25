@@ -3,7 +3,7 @@
 import unittest
 from repolib import ut
 
-import cmdlineargs_cfg
+from impl import cmdlineargs_cfg
 
 class TC_CmdLineArgs(unittest.TestCase):
 
