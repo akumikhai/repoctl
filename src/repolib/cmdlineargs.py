@@ -1,7 +1,7 @@
 #-*- coding: utf-8 -*-
 
 import sys
-from repolib.common import Default
+from repolib.stuff import Default
 
 class ArgParser:
 

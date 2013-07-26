@@ -8,8 +8,32 @@ from repolib import ut
 
 from repolib.cmdlineargs import ArgParser
 from impl import cmdlineargs_cfg
-from impl.controller_cfg import CtlCfg
+from impl import controller_cfg
 from impl.cmdlineargs_pre import initialize_ctlcfg, Dcmd, cmd_usage, usage_message
+
+from repolib import app
+from repolib.stuff import PrintXCollector
+
+import os
+import sys
+
+class CtlCfg(controller_cfg.CtlCfg):
+    
+    def get_config_paths(self):
+        
+        from os.path import abspath,dirname,join
+        
+        path_exe = join(dirname(abspath(sys.argv[0])),'repo.conf')
+        path_default = path_exe
+        
+        R = {
+                'search_paths': [
+                    path_exe,
+                ],
+                'default': path_default,
+            }
+            
+        return R
 
 
 class TC_RealWork(unittest.TestCase):
@@ -23,11 +47,19 @@ class TC_RealWork(unittest.TestCase):
         
         initialize_ctlcfg(CtlCfg())
 
+        self.pxc = PrintXCollector()
+
+        app._printx = self.pxc.printx
+
     def test_repo_list(self):
         r = self.ap.parse_args(['repo','list'])
         cmd = self.ap.result.get('command','usage')
         fcmd = Dcmd.get(cmd,cmd_usage)
-        r = fcmd(self.ap.result)
+        fcmd(self.ap.result)
+
+        sout = self.pxc.buf.getvalue()
+
+        print "DEV: [%s]"%sout
 
     def test_repo_add(self):
         

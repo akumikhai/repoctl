@@ -4,6 +4,8 @@ from .repos.git import RepoGit
 from .repos.gitauto import RepoGitAuto
 from .repos.rsync import RepoRSync
 
+from .app import printx
+
 import json
 import os
 import sys
@@ -123,11 +125,11 @@ class Controller:
     def do_repo_list(self,verbose=False):
         if not verbose:
             for rn in self.repositories_order:
-                print rn
+                printx(rn)
         else:
             for rn in self.repositories_order:
                 repo = self.repositories[rn]
-                print "%-16s %-16s %s"%(repo.name, repo.repo_type, repo.path)
+                printx("%-16s %-16s %s"%(repo.name, repo.repo_type, repo.path))
             
         
         
@@ -216,7 +218,7 @@ class Controller:
 
     def do_remote_list(self):
         for rn in self.remotes_order:
-            print rn
+            printx(rn)
         
         
     def do_remote_add(self,name,path):
@@ -243,10 +245,10 @@ class Controller:
         self.remote_default = name
 
     def do_remote_move_before(self,name,namex):
-        print "do_remote_move_before",name,namex
+        print "TODO: do_remote_move_before",name,namex
 
     def do_remote_move_after(self,name,namex):
-        print "do_remote_move_after",name,namex
+        print "TODO: do_remote_move_after",name,namex
 
     def do_status(self,repos=None):
         if repos is None:
@@ -255,13 +257,13 @@ class Controller:
         for name in repos:
             repo = self.repositories[name]
             rc = repo.status()
-            print "%-15s %-15s : changed %d"%(name,repo.repo_type,rc)
+            printx("%-15s %-15s : changed %d"%(name,repo.repo_type,rc))
             
     def do_push(self,repos=None):
-        print "do_push",repos
+        print "TODO: do_push",repos
         
     def do_pull(self,repos=None):
-        print "do_pull",repos
+        print "TODO: do_pull",repos
         
 
 class Remote:

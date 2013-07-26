@@ -2,14 +2,17 @@
 
 #import controller_cfg as ctlcfg
 
+from repolib.app import printx
+
 _ctlcfg = None
 
 def initialize_ctlcfg(ctlcfg):
     global _ctlcfg
     _ctlcfg = ctlcfg
 
+
 def usage_message():
-    print """\
+    printx("""\
 Usage:
     repoctl <command>
 
@@ -35,20 +38,20 @@ Usage:
     add <name> <path>
     remove <name>
 
-"""
+""")
 
 def cmd_usage(argd):
     usage_message()
 
 def cmd_version(argd):
-    print "cmd_version"
+    print "TODO: cmd_version"
 
 def cmd_help(argd):
     usage_message()
 
 
 def cmd_repo_list(argd):
-    print "cmd_repo_list",argd
+    print "TODO: cmd_repo_list",argd
     ctl = _ctlcfg.mk_controller()
     ctl.do_repo_list(argd.get('verbose',False))
     
@@ -71,12 +74,13 @@ def cmd_repo_move_after(argd):
 def cmd_repo_init(argd):
     ctl = _ctlcfg.mk_controller()
     r = ctl.do_repo_init(argd['name'])
-    print "Local repository [%s] at [%s] initialized"%(r['name'],r['path'])
+    printx("Local repository [%s] at [%s] initialized"%(r['name'],r['path']))
     
 def cmd_repo_drop(argd):
     ctl = _ctlcfg.mk_controller()
     r = ctl.do_repo_drop(argd['name'])
-    print "Local repository [%s] at [%s] dropped"%(r['name'],r['path'])
+    printx("Local repository [%s] at [%s] dropped"%(r['name'],r['path']))
+    printx("Local repository [%s] at [%s] dropped"%(r['name'],r['path']))
     
 
 def cmd_remote_list(argd):
