@@ -51,7 +51,6 @@ def cmd_help(argd):
 
 
 def cmd_repo_list(argd):
-    print "TODO: cmd_repo_list",argd
     ctl = _ctlcfg.mk_controller()
     ctl.do_repo_list(argd.get('verbose',False))
     

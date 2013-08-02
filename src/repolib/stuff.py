@@ -58,8 +58,10 @@ def printx(*args,**kwargs):
 class PrintXCollector:
 
     def __init__(self):
-        self.buf = StringIO()
+        self.reset()
     
     def printx(self,*args,**kwargs):
         print(file=self.buf,*args,**kwargs)
 
+    def reset(self):
+        self.buf = StringIO()
