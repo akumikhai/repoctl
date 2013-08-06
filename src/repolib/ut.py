@@ -4,12 +4,17 @@ import unittest
 
 import types
 
-def tcc_tests(tcc):
-    tests = getattr(tcc,'__TESTS__',None)
-    if tests is None:
-        tests = [tn for tn in dir(tcc) if tn[:5]=='test_' or tn=='runTest']
+def tcc_tests(*ltcc):
+    lut = []
+    
+    for tcc in ltcc:
+        tests = getattr(tcc,'__TESTS__',None)
+        if tests is None:
+            tests = [tn for tn in dir(tcc) if tn[:5]=='test_' or tn=='runTest']
+
+        lut.extend([tcc(tn) for tn in tests])
         
-    return unittest.TestSuite([tcc(tn) for tn in tests])
+    return unittest.TestSuite(lut)
 
 
 def objimport(pypath):
