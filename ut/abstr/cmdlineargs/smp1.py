@@ -5,7 +5,7 @@ from repolib import ut
 
 from repolib.cmdlineargs import (ArgParser,
     No,Fix,Str,Arg,Seq,Alt,Opt,Plus,
-    Val,VMSingle,VMList)
+    Val,VMSingle,VMList,VMDict,Name)
 
 
 class TC_Smp1(unittest.TestCase):
@@ -22,6 +22,7 @@ class TC_Smp1(unittest.TestCase):
         'test_alt',
         'test_opt',
         'test_plus',
+        'test_arg3',
         ]
 
 
@@ -230,6 +231,34 @@ class TC_Smp1(unittest.TestCase):
         r = AP.parse_args(['abra','shvabra','cadabra'])
         self.assertTrue(r)
         self.assertEquals(AP.result,['abra','shvabra','cadabra'])
+        
+        r = AP.parse_args([])
+        self.assertFalse(r)
+        
+
+    def test_arg3(self):
+        AP = ArgParser(Val(VMDict(),Seq(
+            Plus(min=0,pattern=Alt(
+                Arg('abra','a',value=True),
+                Arg('cadabra','c',value=True),
+            )),
+            Name('param',Str()),
+        )))
+        
+        r = AP.parse_args(['sample'])
+        self.assertTrue(r)
+        self.assertEquals(AP.result, {'param':'sample'})
+        
+        r = AP.parse_args(['-a','sample'])
+        self.assertTrue(r)
+        self.assertEquals(AP.result, {'param':'sample','abra':True})
+        
+        r = AP.parse_args(['-a','-c','sample'])
+        self.assertTrue(r)
+        self.assertEquals(AP.result, {'param':'sample','abra':True,'cadabra':True})
+        
+        with self.assertRaises(Exception):
+            r = AP.parse_args(['-a','-c','-c','sample'])
         
         r = AP.parse_args([])
         self.assertFalse(r)

@@ -90,7 +90,11 @@ class VMDict:
     
     def set_value(self,parser,value,name):
         if name is not Default:
-            parser.value[name] = value
+            if name not in parser.value:
+                parser.value[name] = value
+            else:
+                raise Exception('Value is already set')
+
     
 
 
