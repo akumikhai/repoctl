@@ -76,3 +76,18 @@ class TCRealWork(unittest.TestCase):
         lout = sout.split('\n')
         return lout
 
+    def assertCmdResult(self,lcmd,lresult):
+        lx = self.do_cmd(lcmd)
+        self.assertEquals(lx,lresult)
+
+class TC_RW_Common(TCRealWork):
+
+    __TESTS__ = [
+        'test_printx',
+        ]
+
+    def test_printx(self):
+        app.printx('TEST PRINTX')
+        sx = self.pxc.buf.getvalue()
+        self.assertEquals(sx,'TEST PRINTX\n')
+    
