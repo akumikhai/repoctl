@@ -40,6 +40,12 @@ Usage:
 
 """)
 
+def prepare_argd(argd):
+    argd = argd.copy()
+    sverbose = argd.get('verbose','1')
+    argd['verbose'] = int(sverbose)
+    return argd
+
 def cmd_usage(argd):
     usage_message()
 
@@ -52,33 +58,60 @@ def cmd_help(argd):
 
 def cmd_repo_list(argd):
     ctl = _ctlcfg.mk_controller()
-    ctl.do_repo_list(argd.get('verbose',False))
+
+    ctl.do_repo_list(
+        verbose=argd.get('verbose'),
+        )
     
 def cmd_repo_add(argd):
     ctl = _ctlcfg.mk_controller()
-    ctl.do_repo_add(argd['name'],argd['type'],argd['path'])
+
+    ctl.do_repo_add(
+        name=argd['name'],
+        repotype=argd['type'],
+        path=argd['path'],
+        )
     
 def cmd_repo_remove(argd):
     ctl = _ctlcfg.mk_controller()
-    ctl.do_repo_remove(argd['name'])
+
+    ctl.do_repo_remove(
+        name=argd['name'],
+        )
     
 def cmd_repo_move_before(argd):
     ctl = _ctlcfg.mk_controller()
-    ctl.do_repo_move_before(argd['name'],argd.get('name2'))
+
+    ctl.do_repo_move_before(
+        name=argd['name'],
+        namex=argd.get('name2'),
+        )
     
 def cmd_repo_move_after(argd):
     ctl = _ctlcfg.mk_controller()
-    ctl.do_repo_move_after(argd['name'],argd.get('name2'))
+
+    ctl.do_repo_move_after(
+        name=argd['name'],
+        namex=argd.get('name2'),
+        )
     
 def cmd_repo_init(argd):
     ctl = _ctlcfg.mk_controller()
-    r = ctl.do_repo_init(argd['name'])
-    printx("Local repository [%s] at [%s] initialized"%(r['name'],r['path']))
+
+    r = ctl.do_repo_init(
+        name=argd['name'],
+        )
+
+    verbose = argd.get('verbose',1)
+    if verbose>0:
+        printx("Local repository [%s] at [%s] initialized"%(r['name'],r['path']))
     
 def cmd_repo_drop(argd):
     ctl = _ctlcfg.mk_controller()
-    r = ctl.do_repo_drop(argd['name'])
-    printx("Local repository [%s] at [%s] dropped"%(r['name'],r['path']))
+    r = ctl.do_repo_drop(
+        name=argd['name'],
+        )
+    
     printx("Local repository [%s] at [%s] dropped"%(r['name'],r['path']))
     
 
@@ -88,40 +121,60 @@ def cmd_remote_list(argd):
     
 def cmd_remote_add(argd):
     ctl = _ctlcfg.mk_controller()
-    ctl.do_remote_add(argd['name'],argd['path'])
+    ctl.do_remote_add(
+        name=argd['name'],
+        path=argd['path'],
+        )
     
 def cmd_remote_remove(argd):
     ctl = _ctlcfg.mk_controller()
-    ctl.do_remote_remove(argd['name'])
+    ctl.do_remote_remove(
+        name=argd['name'],
+        )
     
 def cmd_remote_default(argd):
     ctl = _ctlcfg.mk_controller()
-    ctl.do_remote_default(argd['name'])
+    ctl.do_remote_default(
+        name=argd['name']
+        )
     
 def cmd_remote_move_before(argd):
     ctl = _ctlcfg.mk_controller()
-    ctl.do_remote_move_before(argd['name'],argd.get('name2'))
+    ctl.do_remote_move_before(
+        name=argd['name'],
+        namex=argd.get('name2'),
+        )
     
 def cmd_remote_move_after(argd):
     ctl = _ctlcfg.mk_controller()
-    ctl.do_remote_move_after(argd['name'],argd.get('name2'))
+    ctl.do_remote_move_after(
+        name=argd['name'],
+        namex=argd.get('name2'),
+        )
     
     
 def cmd_status(argd):
     ctl = _ctlcfg.mk_controller()
     repolist = argd['repos']
+    
     if len(repolist)==0 or (repolist==['all']):
         repolist = None
-    ctl.do_status(repolist)
+    
+    ctl.do_status(
+        repos=repolist
+        )
 
 def cmd_pull(argd):
     ctl = _ctlcfg.mk_controller()
-    ctl.do_pull(argd['repos'])
+    ctl.do_pull(
+        repos=argd['repos']
+        )
 
 def cmd_push(argd):
     ctl = _ctlcfg.mk_controller()
-    ctl.do_push(argd['repos'])
-    
+    ctl.do_push(
+        repos=argd['repos']
+        )
 
 Dcmd = {
     'usage': cmd_usage,

@@ -4,7 +4,7 @@
 from repolib.cmdlineargs import ArgParser
 from impl import cmdlineargs_cfg
 from impl.controller_cfg import CtlCfg
-from impl.cmdlineargs_pre import initialize_ctlcfg, Dcmd, cmd_usage, usage_message
+from impl.cmdlineargs_pre import initialize_ctlcfg, Dcmd, cmd_usage, usage_message, prepare_argd
 
 import sys
 
@@ -16,9 +16,10 @@ if ap.parse_args(sys.argv[1:]):
     
     initialize_ctlcfg(CtlCfg())
     
-    cmd = ap.result.get('command','usage')
+    argd = prepare_argd(ap.result)
+    cmd = argd.get('command','usage')
     fcmd = Dcmd.get(cmd,cmd_usage)
-    r = fcmd(ap.result)
+    r = fcmd(argd)
     sys.exit(r)
     
 else:

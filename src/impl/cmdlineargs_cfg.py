@@ -7,8 +7,8 @@ from repolib.cmdlineargs import (ArgParser,
 
 def mk_argparser():
     commonargs = Plus(min=0,pattern=Alt(
-        Arg('verbose', 'v', valname=True),
-    )),
+                    Arg('verbose', 'v', valname=True,after=Str()),
+                    ))
 
     ap = ArgParser(Val(VMDict(),
             Alt(
@@ -24,7 +24,7 @@ def mk_argparser():
 
                 Seq(
                     Fix('repo'),
-                    #commonargs,
+                    commonargs,
                     Alt(
                         Seq(
                             Name('command', Fix('add', value='repo_add')),

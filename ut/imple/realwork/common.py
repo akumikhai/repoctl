@@ -4,7 +4,7 @@ import unittest
 
 from impl import controller_cfg
 from impl import cmdlineargs_cfg
-from impl.cmdlineargs_pre import initialize_ctlcfg, Dcmd, cmd_usage, usage_message
+from impl.cmdlineargs_pre import initialize_ctlcfg, Dcmd, cmd_usage, usage_message,prepare_argd
 
 from repolib import app
 from repolib.cmdlineargs import ArgParser
@@ -62,9 +62,10 @@ class TCRealWork(unittest.TestCase):
     def do_cmd(self,lcmd):
         self.pxc.reset()
         r = self.ap.parse_args(lcmd)
-        cmd = self.ap.result.get('command','usage')
+        argd = prepare_argd(self.ap.result) 
+        cmd = argd.get('command','usage')
         fcmd = Dcmd.get(cmd,cmd_usage)
-        fcmd(self.ap.result)
+        fcmd(argd)
         sout = self.pxc.buf.getvalue()
         
         if sout=='':
