@@ -93,7 +93,7 @@ class VMDict:
             if name not in parser.value:
                 parser.value[name] = value
             else:
-                raise Exception('Value is already set')
+                raise Exception('Value %s is already set to %s (new value: %s)'%(name,parser.value[name],value))
 
     
 

@@ -66,6 +66,7 @@ def mk_argparser():
 
                 Seq(
                     Fix('remote'),
+                    commonargs,
                     Alt(
                         Seq(
                             Name('command', Fix('add', value='remote_add')),
@@ -88,6 +89,41 @@ def mk_argparser():
                             Name('command', Fix('move-after', value='remote_move_after')),
                             Name('name', Str()),
                             Opt(Name('name2', Str())),
+                            ),
+                        Seq(
+                            Name('command', Fix('create', value='remote_create')),
+                            Name('name', Str()),
+                            Opt(Name('path', Str())),
+                            ),
+                        Seq(
+                            Name('name', Str()),
+                            Fix('repo'),
+                            Alt(
+                                Seq(
+                                    Name('command', Fix('add', value='remote_repo_add')),
+                                    Name('repo_name', Str()),
+                                    Name('path', Str()),
+                                    ),
+
+                                Seq(
+                                    Name('command', Fix('remove', value='remote_repo_remove')),
+                                    Name('repo_name', Str()),
+                                    ),
+
+                                Seq(
+                                    Name('command', Fix('list', value='remote_repo_list')),
+                                    Opt(Arg('verbose', 'v', value=True)),
+                                    ),
+
+                                Seq(
+                                    Name('command', Fix('init', value='remote_repo_init')),
+                                    Name('repo_name', Str()),
+                                    ),
+                                Seq(
+                                    Name('command', Fix('drop', value='remote_repo_drop')),
+                                    Name('repo_name', Str()),
+                                    ),
+                                ),
                             ),
                         ),
                     ),

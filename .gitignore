@@ -1,5 +1,6 @@
 repo.conf
 ut/repo-ut.conf
+tmp/
 
 *~
 *.bak

@@ -117,7 +117,9 @@ def cmd_repo_drop(argd):
 
 def cmd_remote_list(argd):
     ctl = _ctlcfg.mk_controller()
-    ctl.do_remote_list()
+    ctl.do_remote_list(
+        verbose=argd.get('verbose'),
+    )
     
 def cmd_remote_add(argd):
     ctl = _ctlcfg.mk_controller()
@@ -150,6 +152,48 @@ def cmd_remote_move_after(argd):
     ctl.do_remote_move_after(
         name=argd['name'],
         namex=argd.get('name2'),
+        )
+    
+def cmd_remote_create(argd):
+    ctl = _ctlcfg.mk_controller()
+    ctl.do_remote_create(
+        name=argd['name'],
+        path=argd.get('path'),
+        )
+    
+def cmd_remote_repo_add(argd):
+    ctl = _ctlcfg.mk_controller()
+    ctl.do_remote_repo_add(
+        name=argd['name'],
+        repo_name=argd['repo_name'],
+        path=argd.get('path'),
+        )
+    
+def cmd_remote_repo_remove(argd):
+    ctl = _ctlcfg.mk_controller()
+    ctl.do_remote_repo_remove(
+        name=argd['name'],
+        repo_name=argd['repo_name'],
+        )
+    
+def cmd_remote_repo_list(argd):
+    ctl = _ctlcfg.mk_controller()
+    ctl.do_remote_repo_init(
+        name=argd['name'],
+        )
+    
+def cmd_remote_repo_init(argd):
+    ctl = _ctlcfg.mk_controller()
+    ctl.do_remote_repo_init(
+        name=argd['name'],
+        repo_name=argd['repo_name'],
+        )
+    
+def cmd_remote_repo_drop(argd):
+    ctl = _ctlcfg.mk_controller()
+    ctl.do_remote_repo_drop(
+        name=argd['name'],
+        repo_name=argd['repo_name'],
         )
     
     
@@ -193,6 +237,12 @@ Dcmd = {
     'remote_add': cmd_remote_add,
     'remote_remove': cmd_remote_remove,
     'remote_default': cmd_remote_default,
+    'remote_create': cmd_remote_create,
+    'remote_repo_add': cmd_remote_repo_add,
+    'remote_repo_remove': cmd_remote_repo_remove,
+    'remote_repo_list': cmd_remote_repo_list,
+    'remote_repo_init': cmd_remote_repo_init,
+    'remote_repo_drop': cmd_remote_repo_drop,
     
     'status': cmd_status,
     'pull': cmd_pull,

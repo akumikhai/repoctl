@@ -1,10 +1,10 @@
 # -*- coding: utf-8 -*-
 
-from .repos.git import RepoGit
-from .repos.gitauto import RepoGitAuto
-from .repos.rsync import RepoRSync
+from ..repos.git import RepoGit
+from ..repos.gitauto import RepoGitAuto
+from ..repos.rsync import RepoRSync
 
-from .app import printx
+from ..app import printx
 
 import json
 import os
@@ -12,7 +12,19 @@ import sys
 
 RepoD = {rcls.repo_type:rcls for rcls in [RepoGit,RepoGitAuto,RepoRSync]}
 
-class Controller:
+class AController:
+    pass
+    
+class ControllerRepo:
+    pass
+    
+class ControllerRemote:
+    pass
+    
+class ControllerMain:
+    pass
+
+class Controller(AController,ControllerRepo,ControllerRemote,ControllerMain):
     
     def __init__(self):
         self.repositories = {}
@@ -122,8 +134,8 @@ class Controller:
         f.close()
        
     
-    def do_repo_list(self,verbose=False):
-        if not verbose:
+    def do_repo_list(self,verbose):
+        if verbose==0:
             for rn in self.repositories_order:
                 printx(rn)
         else:
@@ -216,9 +228,15 @@ class Controller:
         return r
 
 
-    def do_remote_list(self):
-        for rn in self.remotes_order:
-            printx(rn)
+    def do_remote_list(self,verbose):
+        if verbose==0:
+            for rn in self.remotes_order:
+                printx(rn)
+        else:
+            for rn in self.remotes_order:
+                remote = self.remotes[rn]
+                printx("%-16s %s"%(remote.name, remote.path))
+            
         
         
     def do_remote_add(self,name,path):
@@ -250,6 +268,15 @@ class Controller:
     def do_remote_move_after(self,name,namex):
         print "TODO: do_remote_move_after",name,namex
 
+    def do_remote_create(self,name,path):
+        if name not in self.remotes and path is not None:
+            self.do_remote_add(name,path)
+        else:
+            path = self.remotes[name].path
+        
+        remote = Remote(name,path)
+        remote.save()
+        
 
     def do_repos_command(self,repos,proc):
         if repos is None:
@@ -289,3 +316,18 @@ class Remote:
         self.path = path
 
         self.repositories = {}
+
+    def load(self):
+        pass
+        
+    def  save(self):
+        remotecfg = {
+            'repositories':{}
+        }
+        
+        textconfig = json.dumps(remotecfg,ensure_ascii=False,indent=4)
+        f = open(self.path,'w')
+        f.write(textconfig)
+        f.close()
+        
+        
