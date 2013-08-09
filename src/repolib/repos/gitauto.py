@@ -14,7 +14,7 @@ class RepoGitAuto:
         self.path = path
 
     def init(self):
-        print "[%s] git-auto init"%self.name
+        #print "[%s] git-auto init"%self.name
         
         os.makedirs(self.path)
         run_cmd(self.path,['git','init'])
@@ -34,9 +34,12 @@ class RepoGitAuto:
         
         
     def pull(self,remote):
-        r = run_cmd(self.path,['git','status','--porcelain'])
-        print "[%s] git-auto pull"%self.name
+        #r = run_cmd(self.path,['git','status','--porcelain'])
+        print "TODO: [%s] git-auto pull"%self.name
+        return
+        r = run_cmd(self.path,['git','fetch',remote-repo-path])
+        r = run_cmd(self.path,['git','pull','--rebase',remote-repo-path])
         
     def push(self,remote):
-        print "[%s] git-auto push"%self.name
+        print "TODO: [%s] git-auto push"%self.name
 
