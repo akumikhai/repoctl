@@ -178,7 +178,7 @@ def cmd_remote_repo_remove(argd):
     
 def cmd_remote_repo_list(argd):
     ctl = _ctlcfg.mk_controller()
-    ctl.do_remote_repo_init(
+    ctl.do_remote_repo_list(
         name=argd['name'],
         )
     

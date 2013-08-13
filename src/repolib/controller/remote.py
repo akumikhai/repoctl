@@ -3,6 +3,7 @@
 from ..app import printx
 
 import json
+import os
 
 class Remote:
     
@@ -13,11 +14,17 @@ class Remote:
         self.repositories = {}
 
     def load(self):
-        pass
+        f = open(self.path)
+        textconfig = f.read()
+        f.close()
+        
+        remotecfg = json.loads(textconfig)
+        
+        self.repositories = remotecfg['repositories']
         
     def  save(self):
         remotecfg = {
-            'repositories':{}
+            'repositories': self.repositories
         }
         
         textconfig = json.dumps(remotecfg,ensure_ascii=False,indent=4)
@@ -25,6 +32,20 @@ class Remote:
         f.write(textconfig)
         f.close()
         
+    def do_repo_add(self,name,path):
+        if name in self.repositories:
+            raise Exception("Repo [%s] already exists in remote [%s]"%(name,self.name))
+
+        self.repositories[name] = {
+            'name':name,
+            'path':path,
+            }
+        
+    def do_repo_remove(self,name):
+        if name not in self.repositories:
+            raise Exception("Repo [%s] not found in remote [%s]"%(name,self.name))
+
+        del self.repositories[name]
         
 class ControllerRemote:
 
@@ -42,6 +63,8 @@ class ControllerRemote:
     def do_remote_add(self,name,path):
         if name in self.remotes:
             raise Exception("Remote [%s] already exists"%name)
+
+        path = os.path.abspath(path)
 
         self.remotes[name] = Remote(name,path)
         self.remotes_order.append(name)
@@ -70,12 +93,28 @@ class ControllerRemote:
 
     def do_remote_create(self,name,path):
         if name not in self.remotes and path is not None:
-            self.do_remote_add(name,path)
+            self.do_remote_add(name, path)
         else:
             path = self.remotes[name].path
         
         remote = Remote(name,path)
         remote.save()
+        
+    def do_remote_repo_add(self,name,repo_name,path):
+        remote = self.remotes[name]
+        remote.load()
+        remote.do_repo_add(repo_name,path)
+        remote.save()
+        
+    def do_remote_repo_remove(self, name,repo_name):
+        print "TODO: do_remote_repo_remove",name,repo_name
+        remote = self.remotes[name]
+        remote.load()
+        remote.do_repo_remove(repo_name)
+        remote.save()
+        
+    def do_remote_repo_list(self,name):
+        print "TODO: do_remote_repo_list",name
         
 
     def do_repos_command(self,repos,proc):
